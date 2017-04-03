@@ -37,6 +37,21 @@ func BenchmarkBroadcastWitTwoListeners(b *testing.B) {
 }
 
 func TestExample(t *testing.T) {
+	done := make(chan struct{})
+	go func() {
+		ExampleBroadcast()
+		close(done)
+	}()
+
+	select {
+	case <-done:
+	case <-time.After(1 * time.Second):
+		t.Fatal("Example took too long to run")
+	}
+
+}
+
+func ExampleBroadcast() {
 
 	b := NewBroadcast()
 
